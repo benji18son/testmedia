@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mediamediawiki-sql
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        appdb: mediawiki-sql
+    spec:
+      containers:
+      - name: mediawiki-sql
+        image: mariadb:latest
+        ports:
+          - containerPort: 3306
+            name: mysql-port
+        volumeMounts:
+          - mountPath: "/var/lib/mysql"
+            name: vol-mediawiki-sql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secrets-mediawiki
+                key: rootpassword
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: secrets-mediawiki
+                key: sql-db
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: secrets-mediawiki
+                key: sql-user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secrets-mediawiki
+                key: sql-psword
+      volumes:
+      - name: vol-mediawiki-sql
+        persistentVolumeClaim:
+          claimName: vol-mediawiki-claim
