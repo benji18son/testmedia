@@ -16,7 +16,7 @@ spec:
         - mountPath: /var/www/data/
           name: vol-mediawiki-web
         name: mediawiki-web
-        image: benjamin/mediawiki:1
+        image: gcr.io/projectmedia/benjamin/mediawiki:BUILD_NUMBER
         ports:
         - containerPort: 80
           name: web-port
